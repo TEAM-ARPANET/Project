@@ -1,0 +1,3 @@
+/**
+ * Content script for the extension
+ */
