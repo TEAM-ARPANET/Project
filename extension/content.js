@@ -16,7 +16,25 @@ speechSynthesis.onvoiceschanged = loadVoices;
 loadVoices();
 
 document.addEventListener("pointerdown", (x) => {
+  const image = x.target;
+  if(image || image.tagName !== "IMG") return;
 
+  pressTimer = setTimeout(async () => {
+    x.preventDefault();
+    x.stopPropagation();
+
+    try {
+      const resp = await chrome.runtime.sendMessage({
+        type: "ANALYZE_IMAGE_URL",
+        url: image.currentSrc || image.src,
+      });
+
+      if(!resp?.ok) throw new Error(resp?.error || "Unknown error");
+      speak(resp.description);
+    } catch (err) {
+      console.error("Analyze failed:", err);
+    }
+  }, PRESS_LENGTH);
 });
 
 document.addEventListener("pointerup", () => {
