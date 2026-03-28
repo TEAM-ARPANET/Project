@@ -1,6 +1,5 @@
 /*
  * Server file for the project
- * needs to be edited, add openai key and give it a port number, alongside the other 2 .js files which also need some changes
  */
 
 import express from "express";
@@ -9,38 +8,55 @@ import cors from "cors";
 import fs from "fs";
 import OpenAI from "openai";
 
-const PORT = ****;
+const SERVER_PORT = 6502;
+
 const app = express();
-
-const upload = multer({
-  dest: "uploads/",
-  limits: {fileSize: 15 * 1024 * 1024},
-});
-
 app.use(cors());
 
-const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
-
-app.post("/analyze", upload.single("image"), async (req, res) => {
-  try {
-    if(!req.file) {
-      return res.status(400).json({error: "No image uploaded" });
-    }
-
-    const buffer = fs.readFileSync(req.file.path);
-    const mime = req.file.mimetype || "image/jpeg";
-    const dataUrl = `data:${mime};base64,${buffer.toString("base64")}`;
-
-    fs.unlinkSync(req.file.path);
-
-    res.json({description: response.output_text});
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({error: e.message});
-  }
+const upload = multer({
+    dest: "uploads/",
+    limits: {fileSize: 1024*1024*15},   // 15 mb upload limit
 });
 
-app.listen(PORT, () =>
-  console.log("Server running at http://mapd.cs-smu.ca:****"),
-);
-  
+// Disable for now
+//const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
+
+// List of supported image file types
+const supportedFileTypes = [
+    "image/png",
+    "image/jpeg",
+    "image/webp",
+    "image/gif"
+]
+
+app.post("/analyze", upload.single("image"), async (req, res) => {
+    try {
+        if(!req.file) {
+            return res.status(400).json({error: "No file"});
+        }
+        
+        const buffer = fs.readFileSync(req.file.path);
+        const mime = req.file.mimetype
+        
+        if (!supportedFileTypes.includes(mime)) {
+            return res.status(400).json({error: "File type not supported"});
+        }
+        
+        // Data url thing to send to the AI
+        const dataUrl = `data:${mime};base64,${buffer.toString("base64")}`;
+        
+        // Remove the file now that it's not being used anymoe
+        //fs.unlinkSync(req.file.path);
+        
+        //res.json({content: response.output_text});
+        // For now just send a test message back to the client.
+        res.json({content: "A white and grey wolf sitting on a concrete ledge."});
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({error: e.message});
+    }
+});
+
+app.listen(SERVER_PORT, () => {
+    console.log(`Server running at http://mapd.cs-smu.ca:${SERVER_PORT}`);
+});
