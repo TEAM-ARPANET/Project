@@ -1,3 +1,5 @@
 server/apikey.txt
 server/node_modules
 server/package-lock.json
+uploads/
+server/uploads/

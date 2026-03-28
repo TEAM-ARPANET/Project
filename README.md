@@ -4,4 +4,4 @@
 2. Install required packages ``npm install express multer cors openai``
 
 ## Running the server
-To run: ``node server``
+To run: ``node server`` from project root or server folder.
