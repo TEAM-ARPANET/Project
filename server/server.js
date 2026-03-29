@@ -1,5 +1,12 @@
 /*
  * Server file for the project
+ * 
+ * Authors: Hunter Turner (A00488748)
+ *          Caleb Halverson (A00000000)
+ *          Jim nguyen (A00000000)
+ * 
+ * TODO:
+ *  - Add more / better code comments
  */
 
 import express from "express";

@@ -1,5 +1,9 @@
 /**
  * Content script for the extension
+ * 
+ * @author Hunter Turner (A00488748)
+ * @author Caleb Halverson (A00000000)
+ * @author Jim nguyen (A00000000)
  */
 
 let globalVoices = [];
