@@ -1,7 +1,7 @@
 The purpose of this file is to document manifest.json
 
 Author: Hunter Turner (A00488748)
-        Caleb Halverson (A00000000)
+        Caleb Halverson (A00488146)
         Jim nguyen (A00000000)
 
 {
