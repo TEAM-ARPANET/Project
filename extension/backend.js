@@ -15,7 +15,7 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       const form = new formData();
       
       form.append("image", blobRep, "image.jpg");
-      const serverRes = awai fetch("http://mapd.cs-smu,ca:6502/analyze", {
+      const serverRes = await fetch("http://mapd.cs-smu,ca:6502/analyze", {
         method: "POST",
         body: form,
       });
