@@ -50,7 +50,7 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
         
         //res.json({content: response.output_text});
         // For now just send a test message back to the client.
-        res.json({content: "A white and grey wolf sitting on a concrete ledge."});
+        res.json({contents: "A white and grey wolf sitting on a concrete ledge."});
     } catch (e) {
         console.error(e);
         res.status(500).json({error: e.message});
