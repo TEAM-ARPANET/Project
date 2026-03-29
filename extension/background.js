@@ -8,23 +8,23 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     (async () => {
         try {
             const imgRes = await fetch(msg.url);
-            if(!imgRes.ok) throw new Error(`Image fetch failed: ${imgRes.status}`);
+            if(!imgRes.ok) throw new Error(`Failed to fetch image: ${imgRes.status}`);
             
             const blobRep = await imgRes.blob();
             const form = new FormData();
             
             form.append("image", blobRep, "image.jpg");
-            const serverRes = await fetch("http://localhost:6502/analyze", {
+            const serverResponse = await fetch("http://mapd.cs-smu.ca:6502/analyze", {
                 method: "POST",
                 body: form
             });
             
-            if(!serverRes.ok) {
-                const txt = await serverRes.text().catch(() => "");
-                throw new Error(`Server failed: ${serverRes.status} ${txt}`);
+            if(!serverResponse.ok) {
+                const txt = await serverResponse.text().catch(() => "");
+                throw new Error(`Server failed: ${serverResponse.status} ${txt}`);
             }
             
-            const data = await serverRes.json();
+            const data = await serverResponse.json();
             
             sendResponse({
                 ok: true,

@@ -9,6 +9,9 @@ let timerFired = true;
 const PRESS_LENGTH = 1000;
 const LANG_NAME = "Google UK English Female";
 
+/**
+ * Loads all available voices into globalVoices
+ */
 function loadVoices() {
     globalVoices = speechSynthesis.getVoices();
 }
@@ -16,8 +19,8 @@ function loadVoices() {
 speechSynthesis.onvoiceschanged = loadVoices;
 loadVoices();
 
-document.addEventListener("pointerdown", (x) => {
-    const image = x.target;
+document.addEventListener("pointerdown", (e) => {
+    const image = e.target;
     if(image === null || image.tagName !== "IMG") return;
     
     timerFired = false;
@@ -25,17 +28,17 @@ document.addEventListener("pointerdown", (x) => {
     pressTimer = setTimeout(async () => {
         timerFired = true;
         
-        x.preventDefault();
-        x.stopPropagation();
+        e.preventDefault();
+        e.stopPropagation();
         
         try {
-            const resp = await chrome.runtime.sendMessage({
+            const response = await chrome.runtime.sendMessage({
                 type: "ANALYZE",
                 url: image.currentSrc || image.src
             });
             
-            if(!resp?.ok) throw new Error(resp?.error || "Unknown error");
-            say(resp.contents);
+            if(!response?.ok) throw new Error(response?.error || "Unknown error");
+            say(response.contents);
         } catch (err) {
             console.error("Analyze failed:", err);
         }
@@ -56,8 +59,8 @@ document.addEventListener("pointercancel", () => {
     clearTimeout(pressTimer);
 });
 
-document.addEventListener("contextmenu", (x) => {
-    x.preventDefault();
+document.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
 });
 
 /**
