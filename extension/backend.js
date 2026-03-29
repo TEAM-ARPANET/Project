@@ -1,6 +1,5 @@
 /**
  * Backend script for the extension
- * "manifest.json must be updated to test your server code" <- CHECK THIS
  */
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
