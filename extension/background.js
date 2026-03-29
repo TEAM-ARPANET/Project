@@ -1,5 +1,5 @@
 /**
- * Backend script for the extension
+ * Background script for the extension
  * 
  * @author Hunter Turner (A00488748)
  * @author Caleb Halverson (A00000000)
