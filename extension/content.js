@@ -9,59 +9,59 @@ const PRESS_LENGTH = 600;
 const LANG_NAME = "Google UK English Female";
 
 function loadVoices() {
-  globalVoices = speechSynthesis.getVoices();
+    globalVoices = speechSynthesis.getVoices();
 }
 
 speechSynthesis.onvoiceschanged = loadVoices;
 loadVoices();
 
 document.addEventListener("pointerdown", (x) => {
-  const image = x.target;
-  if(image || image.tagName !== "IMG") return;
+    const image = x.target;
+    if(image || image.tagName !== "IMG") return;
 
-  pressTimer = setTimeout(async () => {
-    x.preventDefault();
-    x.stopPropagation();
+    pressTimer = setTimeout(async () => {
+        x.preventDefault();
+        x.stopPropagation();
 
-    try {
-      const resp = await chrome.runtime.sendMessage({
-        type: "ANALYZE_IMAGE_URL",
-        url: image.currentSrc || image.src,
-      });
+        try {
+        const resp = await chrome.runtime.sendMessage({
+            type: "ANALYZE_IMAGE_URL",
+            url: image.currentSrc || image.src,
+        });
 
-      if(!resp?.ok) throw new Error(resp?.error || "Unknown error");
-      speak(resp.description);
-    } catch (err) {
-      console.error("Analyze failed:", err);
-    }
-  }, PRESS_LENGTH);
+        if(!resp?.ok) throw new Error(resp?.error || "Unknown error");
+        say(resp.description);
+        } catch (err) {
+        console.error("Analyze failed:", err);
+        }
+    }, PRESS_LENGTH);
 });
 
 document.addEventListener("pointerup", () => {
-  clearTimeout(pressTimer);
+    clearTimeout(pressTimer);
 });
 document.addEventListener("pointercancel", () => {
-  clearTimeout(pressTimer);
+    clearTimeout(pressTimer);
 });
 
 document.addEventListener("contextmenu", (x) => {
-  x.preventDefault();
+    x.preventDefault();
 });
 
-function speak(desc) {
-  speechSynthesis.cancel();
+function say(desc) {
+    speechSynthesis.cancel();
 
-  const u = new SpeechSynthesisUtterance(desc);
+    const u = new SpeechSynthesisUtterance(desc);
 
-  u.rate = 0.95;
-  u.pitch = 1.0;
-  u.volume = 1.0;
+    u.rate = 0.95;
+    u.pitch = 1.0;
+    u.volume = 1.0;
 
-  if(voice) {
-    u.voice = voice;
-  } else {
-    console.log("Voice not found, so setting to default.");
-  }
+    if(voice) {
+        u.voice = voice;
+    } else {
+        console.log("Voice not found, so setting to default.");
+    }
 
-  speechSynthesis.speak(u);
+    speechSynthesis.say(u);
 }
