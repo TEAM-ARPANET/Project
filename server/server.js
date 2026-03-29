@@ -10,6 +10,9 @@ import OpenAI from "openai";
 
 const SERVER_PORT = 6502;
 
+const AI_MODEL = "gpt-5.4-mini"
+const AI_PROMPT = "Describe this image in one or two sentences without the use of emojis."
+
 const app = express();
 app.use(cors());
 
@@ -18,8 +21,9 @@ const upload = multer({
     limits: {fileSize: 1024*1024*15},   // 15 mb upload limit
 });
 
-// Disable for now
-//const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
+// Get the API key
+process.env.OPENAI_API_KEY = fs.readFileSync("apikey.txt");
+const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 // List of supported image file types
 const supportedFileTypes = [
@@ -30,8 +34,10 @@ const supportedFileTypes = [
 ]
 
 app.post("/analyze", upload.single("image"), async (req, res) => {
+    console.log(`Request from ${req.headers.host}`)
     try {
         if(!req.file) {
+            console.log("No file");
             return res.status(400).json({error: "No file"});
         }
         
@@ -39,18 +45,34 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
         const mime = req.file.mimetype
         
         if (!supportedFileTypes.includes(mime)) {
+            console.log("File not supported");
             return res.status(400).json({error: "File type not supported"});
         }
         
         // Data url thing to send to the AI
         const dataUrl = `data:${mime};base64,${buffer.toString("base64")}`;
         
-        // Remove the file now that it's not being used anymoe
-        //fs.unlinkSync(req.file.path);
+        const openaiResponse = await openai.responses.create({
+            model: AI_MODEL,
+            input: [{
+                role: "user",
+                content: [
+                    {type: "input_text", "text": AI_PROMPT},
+                    {
+                        type: "input_image",
+                        image_url: dataUrl
+                    }
+                ]
+            }],
+            store: false
+        });
         
-        //res.json({content: response.output_text});
-        // For now just send a test message back to the client.
-        res.json({contents: "A white and grey wolf sitting on a concrete ledge."});
+        // Remove the file now that it's not being used anymoe
+        fs.unlinkSync(req.file.path);
+        
+        res.json({contents: openaiResponse.output_text});
+        console.log(openaiResponse);
+        console.log("Ok");
     } catch (e) {
         console.error(e);
         res.status(500).json({error: e.message});
