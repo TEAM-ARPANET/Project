@@ -17,9 +17,6 @@ import OpenAI from "openai";
 
 const SERVER_PORT = 6502;
 
-const AI_MODEL = "gpt-5.4-mini"
-const AI_PROMPT = "Describe this image in one or two sentences without the use of emojis."
-
 const app = express();
 app.use(cors());
 
@@ -31,6 +28,9 @@ const upload = multer({
 // Get the API key
 process.env.OPENAI_API_KEY = fs.readFileSync("apikey.txt");
 const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
+
+// Get OpenAI parameters
+const AI_PARAMS = JSON.parse(fs.readFileSync("AIParams.json"));
 
 // List of supported image file types
 const supportedFileTypes = [
@@ -60,11 +60,11 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
         const dataUrl = `data:${mime};base64,${buffer.toString("base64")}`;
         
         const openaiResponse = await openai.responses.create({
-            model: AI_MODEL,
+            model: AI_PARAMS.model,
             input: [{
                 role: "user",
                 content: [
-                    {type: "input_text", "text": AI_PROMPT},
+                    {type: "input_text", "text": AI_PARAMS.prompt},
                     {
                         type: "input_image",
                         image_url: dataUrl
@@ -78,7 +78,7 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
         fs.unlinkSync(req.file.path);
         
         res.json({contents: openaiResponse.output_text});
-        console.log(openaiResponse);
+        console.log(openaiResponse.output_text);
         console.log("Ok");
     } catch (e) {
         console.error(e);
@@ -88,4 +88,6 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
 
 app.listen(SERVER_PORT, () => {
     console.log(`Server running at http://mapd.cs-smu.ca:${SERVER_PORT}`);
+    console.log(`Using model: ${AI_PARAMS.model}`);
+    console.log(`AI prompt: ${AI_PARAMS.prompt}`);
 });
