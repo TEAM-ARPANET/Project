@@ -8,7 +8,7 @@
 
 let globalVoices = [];
 let pressTimer = null;
-let timerFired = true;
+let timerFired = false;
 
 const PRESS_LENGTH = 1000;
 const LANG_NAME = "Google UK English Female";
@@ -64,7 +64,9 @@ document.addEventListener("pointercancel", () => {
 });
 
 document.addEventListener("contextmenu", (e) => {
-    e.preventDefault();
+    if (timerFired) {
+        e.preventDefault();
+    }
 });
 
 /**
