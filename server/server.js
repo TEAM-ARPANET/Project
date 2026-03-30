@@ -30,7 +30,7 @@ process.env.OPENAI_API_KEY = fs.readFileSync("apikey.txt");
 const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 
 // Get OpenAI parameters
-const AI_PARAMS = JSON.parse(fs.readFileSync("AIParams.json"));
+const AI_PARAMS = JSON.parse(fs.readFileSync("AIParams.json", "utf-8"));
 
 // List of supported image file types
 const supportedFileTypes = [
