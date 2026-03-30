@@ -2,8 +2,8 @@
  * Server file for the project
  * 
  * Authors: Hunter Turner (A00488748)
- *          Caleb Halverson (A00000000)
- *          Jim nguyen (A00000000)
+ *          Caleb Halverson (A00488146)
+ *          Jim nguyen (A00488742)
  * 
  * TODO:
  *  - Add more / better code comments
