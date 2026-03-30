@@ -51,6 +51,9 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
         const buffer = fs.readFileSync(req.file.path);
         const mime = req.file.mimetype
         
+        // Remove the file now that it's not being used anymoe
+        fs.unlinkSync(req.file.path);
+        
         if (!supportedFileTypes.includes(mime)) {
             console.log("File not supported");
             return res.status(400).json({error: "File type not supported"});
@@ -73,9 +76,6 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
             }],
             store: false
         });
-        
-        // Remove the file now that it's not being used anymoe
-        fs.unlinkSync(req.file.path);
         
         res.json({contents: openaiResponse.output_text});
         console.log(`-> ${openaiResponse.output_text}`);
