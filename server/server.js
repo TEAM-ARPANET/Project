@@ -83,6 +83,9 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
     } catch (e) {
         console.error(e);
         res.status(500).json({error: e.message});
+        
+        // Delete the file if theres an error
+        fs.unlinkSync(req.file.path);
     }
 });
 
