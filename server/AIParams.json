@@ -1,4 +1,4 @@
 {
     "model" : "gpt-5.4-mini",
-    "prompt" : "Describe this image in one or two sentences without the use of emojis. The response should contain only the image description. If the image contains a popular figure, include the detail of who it is."
+    "prompt" : "Describe this image in one or two sentences without the use of emojis. The response should contain only the image description. Name the person in the image if possible."
 }
