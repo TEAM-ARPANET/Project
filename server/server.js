@@ -78,7 +78,7 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
         fs.unlinkSync(req.file.path);
         
         res.json({contents: openaiResponse.output_text});
-        console.log(openaiResponse.output_text);
+        console.log(`-> ${openaiResponse.output_text}`);
         console.log("Ok");
     } catch (e) {
         console.error(e);
