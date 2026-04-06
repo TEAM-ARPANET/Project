@@ -87,7 +87,7 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
         console.log("Ok");
     } catch (e) {
         console.error(e);
-        res.status(500).json({error: e.message});
+        res.status(500).json({error: "Internal server error"});
         
         // Delete the file if theres an error
         fs.unlinkSync(req.file.path);
