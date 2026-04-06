@@ -41,7 +41,7 @@ const supportedFileTypes = [
 ]
 
 app.post("/analyze", upload.single("image"), async (req, res) => {
-    console.log(`Request from ${req.headers.host}`)
+    console.log("Incoming request")
     try {
         if(!req.file) {
             console.log("No file");
@@ -62,12 +62,17 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
         // Data url thing to send to the AI
         const dataUrl = `data:${mime};base64,${buffer.toString("base64")}`;
         
+        let tempPrompt = AI_PARAMS.prompt;
+        if (req.headers.language) {
+            tempPrompt += " Respond for the language "+req.headers.language;
+        }
+        
         const openaiResponse = await openai.responses.create({
             model: AI_PARAMS.model,
             input: [{
                 role: "user",
                 content: [
-                    {type: "input_text", "text": AI_PARAMS.prompt},
+                    {type: "input_text", "text": tempPrompt},
                     {
                         type: "input_image",
                         image_url: dataUrl

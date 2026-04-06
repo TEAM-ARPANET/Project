@@ -11,7 +11,6 @@ let pressTimer = null;
 let timerFired = false;
 
 const PRESS_LENGTH = 1000;
-const LANG_NAME = "Google UK English Female";
 
 /**
  * Loads all available voices into globalVoices
@@ -38,7 +37,8 @@ document.addEventListener("pointerdown", (e) => {
         try {
             const response = await chrome.runtime.sendMessage({
                 type: "ANALYZE",
-                url: image.currentSrc || image.src
+                url: image.currentSrc || image.src,
+                lang: navigator.language
             });
             
             if(!response?.ok) throw new Error(response?.error || "Unknown error");
@@ -78,10 +78,15 @@ function say(phrase) {
     
     const speechObj = new SpeechSynthesisUtterance(phrase);
     
-    speechObj.voice = globalVoices.find(x => x.name===LANG_NAME);
+    speechObj.voice = globalVoices.find(x => x.lang===navigator.language);
     speechObj.rate = 0.95;
     speechObj.pitch = 1;
     speechObj.volume = 1;
+    
+    // Find nearest match if exact match doesn't work
+    if (!speechObj.voice) {
+        speechObj.voice = globalVoices.find(x => x.lang.substring(0, 2)===navigator.language.substring(0, 2));
+    }
     
     if (!speechObj.voice) {
         console.log("Requested voice not found, using default.");
