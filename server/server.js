@@ -6,15 +6,17 @@
  *          Jim nguyen (A00488742)
  * 
  * TODO:
- *  - Add more / better code comments
+ *  - Review new comments on all js files and add any other needed
  */
 
+//SERVER IMPORTS
 import express from "express";
 import multer from "multer";
 import cors from "cors";
 import fs from "fs";
 import OpenAI from "openai";
 
+//GLOBAL CONSTANTS
 const SERVER_PORT = 6502;
 
 const app = express();
@@ -59,14 +61,15 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
             return res.status(400).json({error: "File type not supported"});
         }
         
-        // Data url thing to send to the AI
+        // generated data url to send to the AI
         const dataUrl = `data:${mime};base64,${buffer.toString("base64")}`;
         
         let tempPrompt = AI_PARAMS.prompt;
         if (req.headers.language) {
             tempPrompt += " Respond for the language "+req.headers.language;
         }
-        
+
+        //ai API response function; sends prompt and data to the API
         const openaiResponse = await openai.responses.create({
             model: AI_PARAMS.model,
             input: [{
