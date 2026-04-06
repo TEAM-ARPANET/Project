@@ -6,11 +6,13 @@
  * @author Jim nguyen (A00488742)
  */
 
+//GLOBAL CONSTANTS
+const PRESS_LENGTH = 1000;
+
+//GLOBAL VARIABLES
 let globalVoices = [];
 let pressTimer = null;
 let timerFired = false;
-
-const PRESS_LENGTH = 1000;
 
 /**
  * Loads all available voices into globalVoices
@@ -19,9 +21,14 @@ function loadVoices() {
     globalVoices = speechSynthesis.getVoices();
 }
 
+//event listener that immediately activates when globalVoices variable is ready
 speechSynthesis.onvoiceschanged = loadVoices;
 loadVoices();
 
+//-------------------------------------------------------------------------------------
+/**
+ * Event listeners for different pointer instances; on press, release and cancel
+ */
 document.addEventListener("pointerdown", (e) => {
     const image = e.target;
     if(image === null || image.tagName !== "IMG") return;
@@ -33,7 +40,8 @@ document.addEventListener("pointerdown", (e) => {
         
         e.preventDefault();
         e.stopPropagation();
-        
+
+        //analyze the current image to send to backend file
         try {
             const response = await chrome.runtime.sendMessage({
                 type: "ANALYZE",
@@ -62,7 +70,9 @@ document.addEventListener("pointercancel", () => {
     timerFired = false;
     clearTimeout(pressTimer);
 });
+//------------------------------------------------------------------------------------
 
+//Event listener to remove context manu from popping up from a long click
 document.addEventListener("contextmenu", (e) => {
     if (timerFired) {
         e.preventDefault();
@@ -74,10 +84,12 @@ document.addEventListener("contextmenu", (e) => {
  * @param {string} phrase
  */
 function say(phrase) {
+    //cancel any current phrases before speaking a new phrase
     speechSynthesis.cancel();
     
     const speechObj = new SpeechSynthesisUtterance(phrase);
-    
+
+    //set voice's parameters for when it plays
     speechObj.voice = globalVoices.find(x => x.lang===navigator.language);
     speechObj.rate = 0.95;
     speechObj.pitch = 1;
