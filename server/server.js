@@ -3,7 +3,7 @@
  * 
  * Authors: Hunter Turner (A00488748)
  *          Caleb Halverson (A00488146)
- *          Jim nguyen (A00488742)
+ *          Jim Nguyen (A00488742)
  * 
  * TODO:
  *  - Review new comments on all js files and add any other needed

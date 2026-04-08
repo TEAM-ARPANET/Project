@@ -3,7 +3,7 @@
  * 
  * @author Hunter Turner (A00488748)
  * @author Caleb Halverson (A00488146)
- * @author Jim nguyen (A00488742)
+ * @author Jim Nguyen (A00488742)
  */
 
 //main backend function that fetches the image url from content.js and sends it
