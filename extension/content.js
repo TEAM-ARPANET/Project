@@ -25,7 +25,7 @@ function loadVoices() {
 speechSynthesis.onvoiceschanged = loadVoices;
 loadVoices();
 
-//-------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 /**
  * Event listeners for different pointer instances; on press, release and cancel
  */
@@ -49,7 +49,8 @@ document.addEventListener("pointerdown", (e) => {
                 lang: navigator.language
             });
             
-            if(!response?.ok) throw new Error(response?.error || "Unknown error");
+            if(!response?.ok) throw new Error(response?.error ||
+                "Unknown error");
             say(response.contents);
         } catch (err) {
             console.error("Analyze failed:", err);
@@ -60,7 +61,9 @@ document.addEventListener("pointerdown", (e) => {
 document.addEventListener("pointerup", (e) => {
     if (timerFired) {
         // Add temporary event listener to stop the event from clicking
-        e.target.addEventListener("click", (e) => e.preventDefault(), {once: true});
+        e.target.addEventListener("click", (e) => 
+            e.preventDefault(), {once: true}
+        );
         timerFired = false;
     }
     clearTimeout(pressTimer);
@@ -70,7 +73,8 @@ document.addEventListener("pointercancel", () => {
     timerFired = false;
     clearTimeout(pressTimer);
 });
-//------------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
 
 //Event listener to remove context manu from popping up from a long click
 document.addEventListener("contextmenu", (e) => {
@@ -97,7 +101,9 @@ function say(phrase) {
     
     // Find nearest match if exact match doesn't work
     if (!speechObj.voice) {
-        speechObj.voice = globalVoices.find(x => x.lang.substring(0, 2)===navigator.language.substring(0, 2));
+        speechObj.voice = globalVoices.find(x => 
+            x.lang.substring(0, 2)===navigator.language.substring(0, 2)
+        );
     }
     
     if (!speechObj.voice) {
