@@ -1,4 +1,5 @@
 {
     "model" : "gpt-5.4-mini",
-    "prompt" : "Describe this image in one or two sentences without the use of emojis. The response should contain only the image description. Name the person/object/place in the image if possible."
+    "base_prompt" : "Describe this image in one or two sentences without the use of emojis. The response should contain only the image description. Name the person/object/place in the image if possible.",
+    "detailed_prompt": "Describe this image in three or four sentences without the use of emojis. The response should contain only the image description. Name the person/object/place in the image if possible. Give a detailed description."
 }

@@ -61,15 +61,25 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
             return res.status(400).json({error: "File type not supported"});
         }
         
-        // generated data url to send to the AI
+        // Generat data url to send to the AI
         const dataUrl = `data:${mime};base64,${buffer.toString("base64")}`;
         
-        let tempPrompt = AI_PARAMS.prompt;
+        // Make a temporary string to contain the prompt, a basic and detailed
+        // prompt will be selected depending on if the user wants a short or
+        // long prompt.
+        let tempPrompt;
+        if (req.headers.detailed) {
+            tempPrompt = AI_PARAMS.detailed_prompt;
+        } else {
+            tempPrompt = AI_PARAMS.base_prompt;
+        }
+        
+        // If the header contains a language, append it to the prompt
         if (req.headers.language) {
             tempPrompt += " Respond for the language "+req.headers.language;
         }
 
-        //ai API response function; sends prompt and data to the API
+        // Make a request to the AI, sending it the prompt and the image
         const openaiResponse = await openai.responses.create({
             model: AI_PARAMS.model,
             input: [{
@@ -85,10 +95,12 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
             store: false
         });
         
+        // Send the AI response back to the client
         res.json({contents: openaiResponse.output_text});
         console.log(`-> ${openaiResponse.output_text}`);
         console.log("Ok");
     } catch (e) {
+        // Catch any error and log it, and send a generic error to the client
         console.error(e);
         res.status(500).json({error: "Internal server error"});
         
@@ -100,5 +112,4 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
 app.listen(SERVER_PORT, () => {
     console.log(`Server running at http://mapd.cs-smu.ca:${SERVER_PORT}`);
     console.log(`Using model: ${AI_PARAMS.model}`);
-    console.log(`AI prompt: ${AI_PARAMS.prompt}`);
 });

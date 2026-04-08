@@ -6,47 +6,61 @@
  * @author Jim Nguyen (A00488742)
  */
 
-//main backend function that fetches the image url from content.js and sends it
-//to the server
+// GLOBAL CONSTANTS
+const SERVER_HOST = "http://localhost:6502";
+//const SERVER_HOST = "http://map.cs-smu.ca:6502";
+
+// Main backend function that fetches the image url from content.js and sends it
+// to the server.
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if(msg?.type !== "ANALYZE") return;
     
+    // Create async funtion for talking to the server and call it immediately
     (async () => {
         try {
-            //grab image url from content file
+            // Grab image url from content file
             const imgRes = await fetch(msg.url);
             if(!imgRes.ok) throw new Error(
                 `Failed to fetch image: ${imgRes.status}`);
 
-            //constants for changing file to blob type
+            // Get the blob fmro the file
             const blobRep = await imgRes.blob();
+            
+            // New form to put files
             const form = new FormData();
 
-            //change image file to blob
+            // Put the image blob into the form
             form.append("image", blobRep, "image.jpg");
+            
+            // Send the 
             const serverResponse = await fetch(
-                    "http://map.cs-smu.ca:6502/analyze", {
+                    SERVER_HOST+"/analyze", {
                 method: "POST",
                 body: form,
                 headers: {
-                    language: msg.lang
+                    language: msg.lang,
+                    detailed: msg.detailed
                 }
             });
             
+            // Error handling
             if(!serverResponse.ok) {
                 const txt = await serverResponse.text().catch(() => "");
                 throw new Error(
                     `Server failed: ${serverResponse.status} ${txt}`);
             }
             
+            // Get the json data response from the server
             const data = await serverResponse.json();
-
-            //send image description back to content.js for final step
+            
+            // Send image description back to the content script
             sendResponse({
                 ok: true,
                 contents: data.contents || "(no description)"
             });
         } catch (err) {
+            // Catch error and send it to the content script
+            console.log("D");
             console.error(err);
             sendResponse({ok: false, error: String(err?.message || err) });
         }

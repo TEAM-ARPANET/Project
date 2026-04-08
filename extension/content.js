@@ -6,94 +6,61 @@
  * @author Jim Nguyen (A00488742)
  */
 
-//GLOBAL CONSTANTS
-const PRESS_LENGTH = 1000;
+// GLOBAL CONSTANTS
+const SHORT_LENGTH = 900;
+const LONG_LENGTH = 2000;
 
-//GLOBAL VARIABLES
+// GLOBAL VARIABLES
 let globalVoices = [];
-let pressTimer = null;
-let timerFired = false;
+let shortTimer = null;
+let longTimer = null;
+let shortTimerFired = false;
+let longTimerFired = false;
+
+let targetImage = null;
+
+//------------------------------------------------------------------------------
+// Script functions
 
 /**
- * Loads all available voices into globalVoices
+ * Load all available voices into globalVoices
  */
 function loadVoices() {
     globalVoices = speechSynthesis.getVoices();
 }
 
-//event listener that immediately activates when globalVoices variable is ready
-speechSynthesis.onvoiceschanged = loadVoices;
-loadVoices();
-
-//------------------------------------------------------------------------------
 /**
- * Event listeners for different pointer instances; on press, release and cancel
+ * Ananlyze the current target image. Grabs the url to the image and sends it to
+ * the background script.
  */
-document.addEventListener("pointerdown", (e) => {
-    const image = e.target;
-    if(image === null || image.tagName !== "IMG") return;
-    
-    timerFired = false;
-    
-    pressTimer = setTimeout(async () => {
-        timerFired = true;
+async function analyzeImage(detailed) {
+    try {
+        const response = await chrome.runtime.sendMessage({
+            type: "ANALYZE",
+            url: targetImage.currentSrc || targetImage.src,
+            lang: navigator.language,
+            detailed: detailed
+        });
         
-        e.preventDefault();
-        e.stopPropagation();
-
-        //analyze the current image to send to backend file
-        try {
-            const response = await chrome.runtime.sendMessage({
-                type: "ANALYZE",
-                url: image.currentSrc || image.src,
-                lang: navigator.language
-            });
-            
-            if(!response?.ok) throw new Error(response?.error ||
-                "Unknown error");
-            say(response.contents);
-        } catch (err) {
-            console.error("Analyze failed:", err);
-        }
-    }, PRESS_LENGTH);
-});
-
-document.addEventListener("pointerup", (e) => {
-    if (timerFired) {
-        // Add temporary event listener to stop the event from clicking
-        e.target.addEventListener("click", (e) => 
-            e.preventDefault(), {once: true}
-        );
-        timerFired = false;
+        if(!response?.ok) throw new Error(response?.error ||
+            "Unknown error");
+        say(response.contents);
+    } catch (err) {
+        console.error("Analyze failed:", err);
     }
-    clearTimeout(pressTimer);
-});
-
-document.addEventListener("pointercancel", () => {
-    timerFired = false;
-    clearTimeout(pressTimer);
-});
-
-//------------------------------------------------------------------------------
-
-//Event listener to remove context manu from popping up from a long click
-document.addEventListener("contextmenu", (e) => {
-    if (timerFired) {
-        e.preventDefault();
-    }
-});
+}
 
 /**
  * Convert a string to speech and play it.
  * @param {string} phrase
  */
 function say(phrase) {
-    //cancel any current phrases before speaking a new phrase
+    // Cancel any current phrases before speaking a new phrase
     speechSynthesis.cancel();
     
     const speechObj = new SpeechSynthesisUtterance(phrase);
 
-    //set voice's parameters for when it plays
+    // Set voice's parameters for when it plays
     speechObj.voice = globalVoices.find(x => x.lang===navigator.language);
     speechObj.rate = 0.95;
     speechObj.pitch = 1;
@@ -112,3 +79,84 @@ function say(phrase) {
     
     speechSynthesis.speak(speechObj);
 }
+
+//------------------------------------------------------------------------------
+// Event listeners for different pointer actions
+
+document.addEventListener("pointerdown", (e) => {
+    targetImage = e.target;
+    if(targetImage === null || targetImage.tagName !== "IMG") return;
+    
+    timerFired = false;
+    
+    // Setup the short timer
+    shortTimer = setTimeout(async () => {
+        shortTimerFired = true;
+        
+        say("Short");
+        e.preventDefault();
+        e.stopPropagation();
+        
+        console.log("Short");
+    }, SHORT_LENGTH);
+    
+    // Setup the long timer
+    longTimer = setTimeout(async () => {
+        longTimerFired = true;
+        say("Long")
+        
+        e.preventDefault();
+        e.stopPropagation();
+        
+        console.log("Long");
+    }, LONG_LENGTH);
+});
+
+document.addEventListener("pointerup", (e) => {
+    // Stop the timers right away, this is so the short/long "fired" variables
+    // do not change while waiting for a response from the server
+    clearTimeout(shortTimer);
+    clearTimeout(longTimer);
+    
+    if (shortTimerFired) {
+        // Add temporary event listener to stop the event from clicking
+        e.target.addEventListener("click", (e) => 
+            e.preventDefault(), {once: true}
+        );
+        
+        // Analyze the image, detailed will be set to true if the long timer
+        // also fired
+        analyzeImage(longTimerFired);
+        console.log(longTimerFired);
+    }
+    
+    // Clear the "fired" variables
+    shortTimerFired = false;
+    longTimerFired = false;
+});
+
+document.addEventListener("pointercancel", () => {
+    shortTimerFired = false;
+    longTimerFired = false;
+    clearTimeout(shortTimer);
+    clearTimeout(longTimer);
+});
+
+//------------------------------------------------------------------------------
+// Event listener to remove context menu from popping up from a long click
+
+document.addEventListener("contextmenu", (e) => {
+    if (shortTimerFired) {
+        e.preventDefault();
+    }
+});
+
+// Event listener that immediately activates when globalVoices variable is ready
+speechSynthesis.onvoiceschanged = loadVoices;
+
+//------------------------------------------------------------------------------
+// Setup code
+
+// Trigger load voices in case the voices were loaded before setting the event
+// listener
+loadVoices();
