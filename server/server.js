@@ -32,7 +32,7 @@ const credentials = {key: privateKey, cert: certificate};
 
 const app = express();
 app.use(cors());
-const httpServer = https.createServer(app)
+const httpServer = http.createServer(app)
 const httpsServer = https.createServer(credentials, app)
 
 // Setup multer
