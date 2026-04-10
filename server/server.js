@@ -48,6 +48,9 @@ const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
 // Get OpenAI parameters
 const AI_PARAMS = JSON.parse(fs.readFileSync("AIParams.json", "utf-8"));
 
+// Get auth tokens
+const authTokens = JSON.parse(fs.readFileSync("authenticated.json", "utf-8"));
+
 // List of supported image file types
 const supportedFileTypes = [
     "image/png",
@@ -62,6 +65,13 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
         if(!req.file) {
             console.log("No file");
             return res.status(400).json({error: "No file"});
+        }
+        
+        // Check if the auth token is valid
+        if (!req.headers.auth_token ||
+                !authTokens.includes(req.headers.authTokens)) {
+            fs.unlinkSync(req.file.path);
+            return res.status(401).json({error: "Unauthorized"});
         }
         
         const buffer = fs.readFileSync(req.file.path);
@@ -124,7 +134,8 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
 });
 
 httpsServer.listen(SECURE_SERVER_PORT, () => {
-    console.log(`Secure server running at https://mapd.cs-smu.ca:${SECURE_SERVER_PORT}`);
+    console.log(`Secure server running at ` +
+        `https://mapd.cs-smu.ca:${SECURE_SERVER_PORT}`);
     console.log(`Using model: ${AI_PARAMS.model}`);
 });
 

@@ -11,6 +11,8 @@
 const SERVER_HOST = "http://mapd.cs-smu.ca:6502";
 //const SERVER_HOST = "https://mapd.cs-smu.ca:6503";
 
+const AUTH_TOKEN = "PhZGiTzfSVEAduG50SgbVViPSdzd1qg9";
+
 // Main backend function that fetches the image url from content.js and sends it
 // to the server.
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
@@ -40,7 +42,8 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
                 body: form,
                 headers: {
                     language: msg.lang,
-                    detailed: msg.detailed
+                    detailed: msg.detailed,
+                    auth_token: AUTH_TOKEN
                 }
             });
             
