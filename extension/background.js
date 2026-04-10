@@ -7,8 +7,8 @@
  */
 
 // GLOBAL CONSTANTS
-const SERVER_HOST = "http://localhost:6502";
-//const SERVER_HOST = "http://map.cs-smu.ca:6502";
+//const SERVER_HOST = "https://localhost:6502";
+const SERVER_HOST = "https://map.cs-smu.ca:6502";
 
 // Main backend function that fetches the image url from content.js and sends it
 // to the server.
@@ -60,7 +60,6 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
             });
         } catch (err) {
             // Catch error and send it to the content script
-            console.log("D");
             console.error(err);
             sendResponse({ok: false, error: String(err?.message || err) });
         }

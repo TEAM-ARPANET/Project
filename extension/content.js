@@ -8,7 +8,7 @@
 
 // GLOBAL CONSTANTS
 const SHORT_LENGTH = 900;
-const LONG_LENGTH = 2000;
+const LONG_LENGTH = 2300;
 
 // GLOBAL VARIABLES
 let globalVoices = [];

@@ -9,7 +9,8 @@
  *  - Review new comments on all js files and add any other needed
  */
 
-//SERVER IMPORTS
+// Libraries
+import https from "https";
 import express from "express";
 import multer from "multer";
 import cors from "cors";
@@ -19,9 +20,19 @@ import OpenAI from "openai";
 //GLOBAL CONSTANTS
 const SERVER_PORT = 6502;
 
+const PRIVATE_KEY = "private.key";
+const CERTIFICATE = "server.crt";
+
+// Initialize https
+const privateKey = fs.readFileSync(PRIVATE_KEY, 'utf8');
+const certificate = fs.readFileSync(CERTIFICATE, 'utf8');
+const credentials = {key: privateKey, cert: certificate};
+
 const app = express();
 app.use(cors());
+const httpsServer = https.createServer(credentials, app)
 
+// Setup multer
 const upload = multer({
     dest: "uploads/",
     limits: {fileSize: 1024*1024*15},   // 15 mb upload limit
@@ -109,7 +120,7 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
     }
 });
 
-app.listen(SERVER_PORT, () => {
-    console.log(`Server running at http://mapd.cs-smu.ca:${SERVER_PORT}`);
+httpsServer.listen(SERVER_PORT, () => {
+    console.log(`Server running at https://mapd.cs-smu.ca:${SERVER_PORT}`);
     console.log(`Using model: ${AI_PARAMS.model}`);
 });
