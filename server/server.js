@@ -124,7 +124,7 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
 });
 
 httpsServer.listen(SECURE_SERVER_PORT, () => {
-    console.log(`Secure server running at https://mapd.cs-smu.ca:${SERVER_PORT}`);
+    console.log(`Secure server running at https://mapd.cs-smu.ca:${SECURE_SERVER_PORT}`);
     console.log(`Using model: ${AI_PARAMS.model}`);
 });
 
