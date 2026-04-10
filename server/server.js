@@ -10,6 +10,7 @@
  */
 
 // Libraries
+import http from "http";
 import https from "https";
 import express from "express";
 import multer from "multer";
@@ -19,17 +20,19 @@ import OpenAI from "openai";
 
 //GLOBAL CONSTANTS
 const SERVER_PORT = 6502;
+const SECURE_SERVER_PORT = 6503;
 
 const PRIVATE_KEY = "private.key";
 const CERTIFICATE = "server.crt";
 
-// Initialize https
+// Initialize http and https
 const privateKey = fs.readFileSync(PRIVATE_KEY, 'utf8');
 const certificate = fs.readFileSync(CERTIFICATE, 'utf8');
 const credentials = {key: privateKey, cert: certificate};
 
 const app = express();
 app.use(cors());
+const httpServer = https.createServer(app)
 const httpsServer = https.createServer(credentials, app)
 
 // Setup multer
@@ -120,7 +123,11 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
     }
 });
 
-httpsServer.listen(SERVER_PORT, () => {
+httpServer.listen(SERVER_PORT, () => {
     console.log(`Server running at https://mapd.cs-smu.ca:${SERVER_PORT}`);
     console.log(`Using model: ${AI_PARAMS.model}`);
+});
+
+httpsServer.listen(SERVER_PORT, () => {
+    console.log(`HTTPS Started`);
 });
