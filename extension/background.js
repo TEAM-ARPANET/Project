@@ -7,8 +7,9 @@
  */
 
 // GLOBAL CONSTANTS
-//const SERVER_HOST = "https://localhost:6502";
-const SERVER_HOST = "https://map.cs-smu.ca:6502";
+//const SERVER_HOST = "http://localhost:6502";
+const SERVER_HOST = "http://mapd.cs-smu.ca:6502";
+//const SERVER_HOST = "https://mapd.cs-smu.ca:6503";
 
 // Main backend function that fetches the image url from content.js and sends it
 // to the server.
