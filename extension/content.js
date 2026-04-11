@@ -84,6 +84,11 @@ function say(phrase) {
 // Event listeners for different pointer actions
 
 document.addEventListener("pointerdown", (e) => {
+    // If not a left click, ignore
+    if(e.button !== 0){
+        return;
+    }
+    
     targetImage = e.target;
     if(targetImage === null || targetImage.tagName !== "IMG") {
 
@@ -113,7 +118,7 @@ document.addEventListener("pointerdown", (e) => {
                 }
             }
         }
-      targetImage = closeImg.target;
+        targetImage = closeImg;
     }
     
     timerFired = false;
@@ -156,7 +161,6 @@ document.addEventListener("pointerup", (e) => {
         // Analyze the image, detailed will be set to true if the long timer
         // also fired
         analyzeImage(longTimerFired);
-        console.log(longTimerFired);
     }
     
     // Clear the "fired" variables
@@ -165,10 +169,10 @@ document.addEventListener("pointerup", (e) => {
 });
 
 document.addEventListener("pointercancel", () => {
-    shortTimerFired = false;
-    longTimerFired = false;
     clearTimeout(shortTimer);
     clearTimeout(longTimer);
+    shortTimerFired = false;
+    longTimerFired = false;
 });
 
 //------------------------------------------------------------------------------
