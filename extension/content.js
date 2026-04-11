@@ -99,6 +99,7 @@ document.addEventListener("pointerdown", (e) => {
         let elemArray = document.getElementsByTagName("*");
         let arrLength = elemArray.length;
         let imgDist = 10000;
+        let closeImg = null;
 
         for (let i = 0; i < arrLength; i++) {
 
