@@ -85,7 +85,36 @@ function say(phrase) {
 
 document.addEventListener("pointerdown", (e) => {
     targetImage = e.target;
-    if(targetImage === null || targetImage.tagName !== "IMG") return;
+    if(targetImage === null || targetImage.tagName !== "IMG") {
+
+        let mousex = e.clientX;
+        let mousey = e.clientY;
+
+        //elemArray is the array of all elements currently on the page
+        let elemArray = document.getElementsByTagName("*");
+        let arrLength = elemArray.length;
+        let imgDist = 10000;
+
+        for (let i = 0; i < arrLength; i++) {
+
+            //if the array element is an image then compare distances
+            if(elemArray[i].tagName === "IMG"){
+
+                //get the x and y for the current element
+                let compCoords = elemArray[i].getBoundingClientRect();
+
+                //calculate distance from current element to the mouse
+                let compDist = Math.sqrt(((mousey - compCoords.y) * (mousey - compCoords.y)) + ((mousex - compCoords.x) * (mousex - compCoords.x)));
+
+                //see if new element is closer
+                if(compDist < imgDist) {
+                    imgDist = compDist;
+                    closeImg = elemArray[i];
+                }
+            }
+        }
+      targetImage = closeImg.target;
+    }
     
     timerFired = false;
     
