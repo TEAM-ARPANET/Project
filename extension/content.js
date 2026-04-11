@@ -94,12 +94,11 @@ document.addEventListener("pointerdown", (e) => {
 
         let mousex = e.clientX;
         let mousey = e.clientY;
+        targetImage = null;
 
         //elemArray is the array of all elements currently on the page
         let elemArray = document.getElementsByTagName("*");
         let arrLength = elemArray.length;
-        let imgDist = 10000;
-        let closeImg = null;
 
         for (let i = 0; i < arrLength; i++) {
 
@@ -109,17 +108,13 @@ document.addEventListener("pointerdown", (e) => {
                 //get the x and y for the current element
                 let compCoords = elemArray[i].getBoundingClientRect();
 
-                //calculate distance from current element to the mouse
-                let compDist = Math.sqrt(((mousey - compCoords.y) * (mousey - compCoords.y)) + ((mousex - compCoords.x) * (mousex - compCoords.x)));
-
-                //see if new element is closer
-                if(compDist < imgDist) {
-                    imgDist = compDist;
-                    closeImg = elemArray[i];
+                if(((mousex > compCoords.left) && (mousex < compCoords.right)) && ((mousey > compCoords.top) && (mousey < compCoords.bottom))){
+                    targetImage = elemArray[i];
+                    break;
                 }
             }
         }
-        targetImage = closeImg;
+        return;
     }
     
     timerFired = false;
