@@ -90,31 +90,39 @@ document.addEventListener("pointerdown", (e) => {
     }
     
     targetImage = e.target;
+    
+    // If the target is not an image, find the image the mouse is hovering over
     if(targetImage === null || targetImage.tagName !== "IMG") {
-
+        
         let mousex = e.clientX;
         let mousey = e.clientY;
         targetImage = null;
 
-        //elemArray is the array of all elements currently on the page
+        // elemArray is the array of all elements currently on the page
         let elemArray = document.getElementsByTagName("*");
         let arrLength = elemArray.length;
 
         for (let i = 0; i < arrLength; i++) {
-
-            //if the array element is an image then compare distances
+            // If the array element is an image then compare distances
             if(elemArray[i].tagName === "IMG"){
 
-                //get the x and y for the current element
+                // Get the x and y for the current element
                 let compCoords = elemArray[i].getBoundingClientRect();
 
-                if(((mousex > compCoords.left) && (mousex < compCoords.right)) && ((mousey > compCoords.top) && (mousey < compCoords.bottom))){
+                if(mousex > compCoords.left &&
+                        mousex < compCoords.right &&
+                        mousey > compCoords.top &&
+                        mousey < compCoords.bottom){
                     targetImage = elemArray[i];
                     break;
                 }
             }
         }
-        return;
+        
+        // If no image was found, return
+        if (targetImage === null) {
+            return;
+        }
     }
     
     timerFired = false;
