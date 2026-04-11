@@ -69,7 +69,7 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
         
         // Check if the auth token is valid
         if (!req.headers.auth_token ||
-                !authTokens.includes(req.headers.authTokens)) {
+                !authTokens.includes(req.headers.auth_token)) {
             fs.unlinkSync(req.file.path);
             return res.status(401).json({error: "Unauthorized"});
         }
