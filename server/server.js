@@ -75,7 +75,7 @@ app.post("/analyze", upload.single("image"), async (req, res) => {
         }
         
         const buffer = fs.readFileSync(req.file.path);
-        const mime = req.file.mimetype
+        const mime = req.file.mimetype;
         
         // Remove the file now that it's not being used anymoe
         fs.unlinkSync(req.file.path);
