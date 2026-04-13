@@ -6,11 +6,9 @@
  * @author Jim Nguyen (A00488742)
  */
 
-// GLOBAL CONSTANTS
-const SHORT_LENGTH = 900;
-const LONG_LENGTH = 2300;
-
 // GLOBAL VARIABLES
+let shortLength = 1000;
+let longLength = 2500;
 let globalVoices = [];
 let shortTimer = null;
 let longTimer = null;
@@ -18,6 +16,25 @@ let shortTimerFired = false;
 let longTimerFired = false;
 
 let targetImage = null;
+
+//------------------------------------------------------------------------------
+// Settings 
+
+/**
+ * Loads the previously saved settings back into the controls, so they remember their state between sessions
+ */
+chrome.storage.sync.get(['shortLength', 'longLength'], (result) => {
+  if (result.shortLength) shortLength = result.shortLength;
+  if (result.longLength) longLength = result.longLength;
+});
+
+/**
+ * Keep values in sync if settings are changed while the page is open
+ */
+chrome.storage.onChanged.addListener((changes) => {
+  if (changes.shortLength) shortLength = changes.shortLength.newValue;
+  if (changes.longLength) longLength = changes.longLength.newValue;
+});
 
 //------------------------------------------------------------------------------
 // Script functions
@@ -136,7 +153,7 @@ document.addEventListener("pointerdown", (e) => {
         e.stopPropagation();
         
         console.log("Short");
-    }, SHORT_LENGTH);
+    }, shortLength);
     
     // Setup the long timer
     longTimer = setTimeout(async () => {
@@ -147,7 +164,7 @@ document.addEventListener("pointerdown", (e) => {
         e.stopPropagation();
         
         console.log("Long");
-    }, LONG_LENGTH);
+    }, longLength);
 });
 
 document.addEventListener("pointerup", (e) => {
