@@ -18,10 +18,10 @@ let longTimerFired = false;
 let targetImage = null;
 
 //------------------------------------------------------------------------------
-// Settings 
+// Popup settings 
 
 /**
- * Loads the previously saved settings back into the controls, so they remember their state between sessions
+ * Event listener that loads the previously saved settings back into the controls, so they remember their state between sessions
  */
 chrome.storage.sync.get(['shortLength', 'longLength'], (result) => {
   if (result.shortLength) shortLength = result.shortLength;
@@ -29,7 +29,7 @@ chrome.storage.sync.get(['shortLength', 'longLength'], (result) => {
 });
 
 /**
- * Keep values in sync if settings are changed while the page is open
+ * Event listener to keep values in sync if settings are changed while the page is open
  */
 chrome.storage.onChanged.addListener((changes) => {
   if (changes.shortLength) shortLength = changes.shortLength.newValue;
