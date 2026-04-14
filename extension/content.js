@@ -128,12 +128,13 @@ document.addEventListener("pointerdown", (e) => {
         let arrLength = elemArray.length;
 
         for (let i = 0; i < arrLength; i++) {
-            // If the array element is an image then compare distances
+            // check if current element is an image
             if(elemArray[i].tagName === "IMG"){
 
-                // Get the x and y for the current element
+                // Get the coordinates of the image element
                 let compCoords = elemArray[i].getBoundingClientRect();
 
+                //if mouse is inside element coordinates, use that image
                 if(mousex > compCoords.left &&
                         mousex < compCoords.right &&
                         mousey > compCoords.top &&
