@@ -1,0 +1,54 @@
+/*
+    CSS file for popup addition
+*/
+
+title {
+    background-color: #303030;
+    color: white;
+}
+
+body {
+    background-color: #303030;
+    color: white;
+    font-size: 7vmax;
+    width: 97vmax;
+    height: 82vmax;
+    text-align: center;
+}
+
+button {
+    background-color: lightseagreen;
+    color: white;
+    font-size: 8vmax;
+    border-radius: 10px;
+    padding: 5px;
+    width: 100%;
+}
+
+range-row {
+    color: lightseagreen;
+}
+
+.field {
+    background-color: #303030;
+    color: white;
+}
+
+#short-press-lengths {
+    accent-color: lightseagreen;
+    width: 100%;
+}
+
+#long-press-lengths {
+    accent-color: lightseagreen;
+    width: 100%;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    height: 7vmax;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    height: 7vmax;
+    -webkit-appearance: none;
+}
