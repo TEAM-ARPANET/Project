@@ -1,12 +1,15 @@
 /*
-    CSS file for popup addition
-*/
+ *   CSS file for popup addition
+ *   Author: Caleb Halverson (A00488146)
+ */
 
+/* "Settings" <- title text and background */
 title {
     background-color: #303030;
     color: white;
 }
 
+/* sets body colour and background, plus popup size */
 body {
     background-color: #303030;
     color: white;
@@ -16,6 +19,7 @@ body {
     text-align: center;
 }
 
+/* settings for '?' button */
 button {
     background-color: lightseagreen;
     color: white;
@@ -25,30 +29,25 @@ button {
     width: 100%;
 }
 
+/* sets the colour of the length sliders 'thumbs' */
 range-row {
     color: lightseagreen;
 }
 
+/* sets background and text colours for behind the sliders & slider subtexts */
 .field {
     background-color: #303030;
     color: white;
 }
 
+/* sets slider background and width for short length slider */
 #short-press-lengths {
     accent-color: lightseagreen;
     width: 100%;
 }
 
+/* sets slider background and width for long length slider */
 #long-press-lengths {
     accent-color: lightseagreen;
     width: 100%;
-}
-
-input[type="range"]::-webkit-slider-runnable-track {
-    height: 7vmax;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-    height: 7vmax;
-    -webkit-appearance: none;
 }
