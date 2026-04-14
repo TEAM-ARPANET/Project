@@ -7,19 +7,19 @@
  */
 
 // GLOBAL CONSTANTS
-const DEFAULT_SHORT_LENGTH = 900;
-const DEFAULT_LONG_LENGTH = 1800;
+const DEFAULT_SHORT_LENGTH = 900;   // Default value for short press
+const DEFAULT_LONG_LENGTH = 1800;   // Default value for long press
 
 // GLOBAL VARIABLES
-let shortLength;
-let longLength;
+let shortLength;    // Length of a short press
+let longLength;     // Length of a long press
 let globalVoices = [];
-let shortTimer = null;
-let longTimer = null;
-let shortTimerFired = false;
-let longTimerFired = false;
+let shortTimer = null;  // Timer for the short press
+let longTimer = null;   // Timer for the long press
+let shortTimerFired = false;    // Set when fired
+let longTimerFired = false;     // Set when fired
 
-let targetImage = null;
+let targetImage = null;     // The target image to sent to the background script
 
 //------------------------------------------------------------------------------
 // Popup settings 
@@ -209,7 +209,8 @@ document.addEventListener("pointercancel", () => {
 // Event listener to remove context menu from popping up from a long click
 
 document.addEventListener("contextmenu", (e) => {
-    if (shortTimerFired) {
+    // Prevent it if it's not right click, this is so it's prevented on mobile
+    if(e.button !== 2){
         e.preventDefault();
     }
 });

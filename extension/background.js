@@ -7,7 +7,6 @@
  */
 
 // GLOBAL CONSTANTS
-//const SERVER_HOST = "http://localhost:6502";
 const SERVER_HOST = "http://mapd.cs-smu.ca:6502";
 //const SERVER_HOST = "https://mapd.cs-smu.ca:6503";
 

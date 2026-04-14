@@ -5,8 +5,8 @@
  *          Caleb Halverson (A00488146)
  *          Jim Nguyen (A00488742)
  * 
- * TODO:
- *  - Review new comments on all js files and add any other needed
+ * Notes:
+ * HTTPS not fully tested, requires signed ceritifcates
  */
 
 // Libraries
@@ -22,8 +22,8 @@ import OpenAI from "openai";
 const SERVER_PORT = 6502;
 const SECURE_SERVER_PORT = 6503;
 
-const PRIVATE_KEY = "private.key";
-const CERTIFICATE = "server.crt";
+const PRIVATE_KEY = "private.key";  // Path to the private key file
+const CERTIFICATE = "server.crt";   // Path to the certificate
 
 // Initialize http and https
 const privateKey = fs.readFileSync(PRIVATE_KEY, 'utf8');
@@ -59,6 +59,10 @@ const supportedFileTypes = [
     "image/gif"
 ]
 
+/**
+ * Function to handle all requests to /analyze. Process client request and make
+ * request to OpenAI.
+ */
 app.post("/analyze", upload.single("image"), async (req, res) => {
     console.log("Incoming request")
     try {
