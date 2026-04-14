@@ -6,9 +6,13 @@
  * @author Jim Nguyen (A00488742)
  */
 
+// GLOBAL CONSTANTS
+const DEFAULT_SHORT_LENGTH = 900;
+const DEFAULT_LONG_LENGTH = 1800;
+
 // GLOBAL VARIABLES
-let shortLength = 1000;
-let longLength = 2500;
+let shortLength;
+let longLength;
 let globalVoices = [];
 let shortTimer = null;
 let longTimer = null;
@@ -21,19 +25,23 @@ let targetImage = null;
 // Popup settings 
 
 /**
- * Event listener that loads the previously saved settings back into the controls, so they remember their state between sessions
+ * Event listener that loads the previously saved settings back into the
+ * controls, so they remember their state between sessions
  */
 chrome.storage.sync.get(['shortLength', 'longLength'], (result) => {
-  if (result.shortLength) shortLength = result.shortLength;
-  if (result.longLength) longLength = result.longLength;
+    if (result.shortLength) shortLength = result.shortLength ||
+        DEFAULT_SHORT_LENGTH;
+    if (result.longLength) longLength = result.longLength ||
+        DEFAULT_LONG_LENGTH;
 });
 
 /**
- * Event listener to keep values in sync if settings are changed while the page is open
+ * Event listener to keep values in sync if settings are changed while the page
+ * is open
  */
 chrome.storage.onChanged.addListener((changes) => {
-  if (changes.shortLength) shortLength = changes.shortLength.newValue;
-  if (changes.longLength) longLength = changes.longLength.newValue;
+    if (changes.shortLength) shortLength = changes.shortLength.newValue;
+    if (changes.longLength) longLength = changes.longLength.newValue;
 });
 
 //------------------------------------------------------------------------------
