@@ -18,20 +18,18 @@ chrome.storage.sync.get(['shortLength', 'longLength'], (result) => {
 document.getElementById('short-press-lengths').addEventListener('input',
         function () {
     document.getElementById('short-press-value').textContent = this.value + 's';
+    saveSettings();
 });
 // Update displayed long press time dynamically as the user adjusts the input
 document.getElementById('long-press-lengths').addEventListener('input', 
         function () {
     document.getElementById('long-press-value').textContent = this.value + 's';
+    saveSettings();
 });
-
-// Add click event to the "Save settings" button to store values in Chrome
-// storage
-document.querySelector('.save-btn').addEventListener('click', saveSettings);
 
 // Add click event to the "Help" button to speak instructions using current
 // values
-document.querySelector('.help-btn').addEventListener('click', () => {
+document.getElementById('help-btn').addEventListener('click', () => {
     const short = document.getElementById('short-press-lengths').value;
     const long = document.getElementById('long-press-lengths').value;
     // Speak guidance to the user about how long to hold for each description
