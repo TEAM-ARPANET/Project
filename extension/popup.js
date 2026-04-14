@@ -4,7 +4,8 @@ chrome.storage.sync.get(['shortLength', 'longLength'], (result) => {
     if (result.shortLength) {
         const shortSec = result.shortLength / 1000;
         document.getElementById('short-press-lengths').value = shortSec;
-        document.getElementById('short-press-value').textContent = shortSec + 's';
+        document.getElementById('short-press-value').textContent = shortSec +
+            's';
     }
     if (result.longLength) {
         const longSec = result.longLength / 1000;
@@ -14,30 +15,38 @@ chrome.storage.sync.get(['shortLength', 'longLength'], (result) => {
 });
 
 // Update displayed short press time dynamically as the user adjusts the input
-document.getElementById('short-press-lengths').addEventListener('input', function () {
+document.getElementById('short-press-lengths').addEventListener('input',
+        function () {
     document.getElementById('short-press-value').textContent = this.value + 's';
 });
 // Update displayed long press time dynamically as the user adjusts the input
-document.getElementById('long-press-lengths').addEventListener('input', function () {
+document.getElementById('long-press-lengths').addEventListener('input', 
+        function () {
     document.getElementById('long-press-value').textContent = this.value + 's';
 });
 
-// Add click event to the "Save settings" button to store values in Chrome storage
+// Add click event to the "Save settings" button to store values in Chrome
+// storage
 document.querySelector('.save-btn').addEventListener('click', saveSettings);
 
-// Add click event to the "Help" button to speak instructions using current values
+// Add click event to the "Help" button to speak instructions using current
+// values
 document.querySelector('.help-btn').addEventListener('click', () => {
     const short = document.getElementById('short-press-lengths').value;
     const long = document.getElementById('long-press-lengths').value;
-    // Speak guidance to the user about how long to hold for each description type
-    say("Hold an image for " + short + " seconds for a short description, or " + long + " seconds for a detailed description.");
+    // Speak guidance to the user about how long to hold for each description
+    // type
+    say("Hold an image for " + short + " seconds for a short description, or " + 
+        long + " seconds for a detailed description.");
 });
 
 // Save the current settings (converted to milliseconds) into Chrome storage
 function saveSettings() {
     const settings = {
-        shortLength: Math.round(parseFloat(document.getElementById('short-press-lengths').value) * 1000),
-        longLength: Math.round(parseFloat(document.getElementById('long-press-lengths').value) * 1000),
+        shortLength: Math.round(parseFloat(
+            document.getElementById('short-press-lengths').value) * 1000),
+        longLength: Math.round(parseFloat(
+            document.getElementById('long-press-lengths').value) * 1000),
     };
     // Store settings and provide visual feedback to the user
     chrome.storage.sync.set(settings, () => {
@@ -84,5 +93,6 @@ function loadVoices() {
     globalVoices = speechSynthesis.getVoices();
 }
 
-// Trigger load voices in case the voices were loaded before setting the event listener
+// Trigger load voices in case the voices were loaded before setting the event
+// listener
 loadVoices();
