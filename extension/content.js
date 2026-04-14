@@ -160,8 +160,6 @@ document.addEventListener("pointerdown", (e) => {
         say("Short");
         e.preventDefault();
         e.stopPropagation();
-        
-        console.log("Short");
     }, shortLength);
     
     // Setup the long timer
@@ -171,8 +169,6 @@ document.addEventListener("pointerdown", (e) => {
         
         e.preventDefault();
         e.stopPropagation();
-        
-        console.log("Long");
     }, longLength);
 });
 
