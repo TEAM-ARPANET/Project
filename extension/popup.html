@@ -1,43 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Settings</title>
-  <link rel="stylesheet" href="popup.css">
-  
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Settings</title>
+        <link rel="stylesheet" href="popup.css">
+    </head>
+    <body>
+        <div class="popup-header">
+            <span>Settings</span>
+            <button class="help-btn">?</button>
+        </div>
+        
+        <div class="popup-body">
 
-  <div class="popup-header">
-    <span>Settings</span>
-    <button class="help-btn">?</button>
-  </div>
+            <div class="field">
+                <label for="short-press-lengths">Short Press</label>
+                <div class="range-row">
+                    <input type="range" id="short-press-lengths" name="press-lengths" min="1" max="3" step="0.5" value="1">
+                    <span class="range-value" id="short-press-value">1s</span>
+                </div>
+            </div>
+            
+            <div class="field">
+                <label for="long-press-lengths">Long Press</label>
+                <div class="range-row">
+                    <input type="range" id="long-press-lengths" name="press-lengths" min="2.5" max="4.5" step="0.5"
+                        value="2.5">
+                    <span class="range-value" id="long-press-value">2.5s</span>
+                </div>
+            </div>
+            
+        </div>
 
-  <div class="popup-body">
-
-    <div class="field">
-      <label for="short-press-lengths">Short Press</label>
-      <div class="range-row">
-        <input type="range" id="short-press-lengths" name="press-lengths" min="1" max="3" step="0.5" value="1">
-        <span class="range-value" id="short-press-value">1s</span>
-      </div>
-    </div>
-
-    <div class="field">
-      <label for="long-press-lengths">Long Press</label>
-      <div class="range-row">
-        <input type="range" id="long-press-lengths" name="press-lengths" min="2.5" max="4.5" step="0.5" value="2.5">
-        <span class="range-value" id="long-press-value">2.5s</span>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="popup-footer">
-    <button class="save-btn">Save settings</button>
-  </div>
-
-  <script src="popup.js"></script>
-
-</body>
+        <div class="popup-footer">
+            <button class="save-btn">Save settings</button>
+        </div>
+        
+        <script src="popup.js"></script>
+    </body>
 </html>
